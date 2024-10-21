@@ -1,0 +1,51 @@
+plugins {
+    id "io.micronaut.application" version "4.0.0"
+    id "com.github.johnrengelman.shadow" version "8.0.0"
+}
+
+micronaut {
+    runtime("lambda_provided")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("example.hello.*") // Adjust to your package structure
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Dependency injection
+    implementation("io.micronaut:micronaut-inject")
+    implementation("jakarta.inject:jakarta.inject-api")
+
+    // AWS SDK for SQS
+    implementation("software.amazon.awssdk:sqs:2.20.0")
+
+    // Micronaut AWS integration
+    implementation("io.micronaut.aws:micronaut-function-aws:4.0.0")
+
+    // HTTP Client
+    implementation("io.micronaut:micronaut-http-client")
+
+    // Use Micronaut Serde for JSON
+    implementation("io.micronaut.serde:micronaut-serde-jackson:2.11.0")
+
+    // Annotation Processor
+    annotationProcessor("io.micronaut:micronaut-inject-java")
+
+    // Testing
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+}
+
+application {
+    mainClass.set("example.hello.HelloWorldLambda") // Ensure this points to your main class
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("17") // Use Java 17
+    targetCompatibility = JavaVersion.toVersion("17")
+}
